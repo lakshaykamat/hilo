@@ -5,8 +5,9 @@ import { Post } from "@/types/Post";
 import PostContent from "./PostCardContent";
 import PostCardFooter from "./PostCardFooter";
 import PostCardHeader from "./PostCardHeader";
-import PostModel from "./PostModel";
 import { mutate } from "swr";
+import PostModal from "./PostModal/PostModal";
+import { likeContent } from "@/lib/utils";
 
 type PostStateCard = {
   count: number;
@@ -23,7 +24,6 @@ export const PostCard = ({ post }: { post: Post }) => {
   const [inputCommentText, setInputCommentText] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isPostModelOpen, setPostModelOpen] = useState(false);
-  const [comments, setComments] = useState(post.comments);
   const isTexutalPost = !post.media.fileType && !post.media.fileType;
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -49,7 +49,7 @@ export const PostCard = ({ post }: { post: Post }) => {
     setPostLike({ count: updatedCount, isLiked: updatedIsLiked });
 
     try {
-      await axiosInstance.post(`/posts/${post._id}/Post/like`);
+      await likeContent("Post", post._id);
     } catch (error) {
       console.error("Error liking post:", error);
 
@@ -92,22 +92,16 @@ export const PostCard = ({ post }: { post: Post }) => {
     };
   }, [isPostModelOpen]);
 
-  const postComment = async () => {
+  const postComment = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     if (!inputCommentText) return;
 
     try {
       const response = await axiosInstance.post(`/posts/${post._id}/comments`, {
         content: inputCommentText,
       });
-
-      if (response.data) {
-        mutate("/posts");
-        setInputCommentText("");
-        setComments((prev) => ({
-          ...prev,
-          ...response.data,
-        }));
-      }
+      setInputCommentText("");
+      mutate("/posts");
     } catch (error) {
       console.error("Error adding comment:", error);
     }
@@ -146,7 +140,7 @@ export const PostCard = ({ post }: { post: Post }) => {
         followUser={followUser}
       />
       {isPostModelOpen && (
-        <PostModel
+        <PostModal
           followUser={followUser}
           postComment={postComment}
           inputCommentText={inputCommentText}

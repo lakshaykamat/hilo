@@ -8,7 +8,8 @@ import TopBar from "@/components/TopBar";
 import { Toaster } from "@/components/ui/toaster";
 import NavBar from "@/components/NavBar";
 import "./globals.css";
-import { Sidebar, SidBarMini, BottomBar } from "@/components/Sidebar";
+import { Sidebar, SidBarMini, BottomBar } from "@/components/Sidebar/Sidebar";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -88,7 +89,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
     return (
       <div className="h-screen justify-between items-center outline flex flex-col w-full">
         <div className="basis-full flex items-center justify-center">
-          <img src="hilo-logo.png" className="w-[20rem] h-[20rem]" />
+          <Image alt="app-logo" src="/hilo-logo.png" width={320} height={320} />
         </div>
         <p className="my-4">From Lakshay Kamat</p>
       </div>

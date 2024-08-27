@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Search, X } from "lucide-react"; // Adding a clear (X) icon
 import { Input } from "./ui/input";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 
 const TopBar = () => {
   const router = useRouter();
@@ -22,15 +23,15 @@ const TopBar = () => {
   return (
     <form
       onSubmit={goSearch}
-      className="flex items-center justify-between pt-3 bg-card px-7 gap-5"
+      className="flex items-center justify-between pt-3 bg-card px-7 gap-2"
     >
       <div className="relative flex items-center w-full">
         <Input
           onChange={(e) => setInputSearchText(e.target.value)}
           type="text"
           value={inputSearchText}
-          placeholder="Search..."
-          className="rounded-full px-5 py-3 w-full" // Make input larger for better UX
+          placeholder="Search people's..."
+          className="rounded-lg px-3 w-full"
         />
         {inputSearchText && (
           <X
@@ -39,9 +40,16 @@ const TopBar = () => {
           />
         )}
       </div>
-      <button type="submit" className="ml-3">
-        <Search />
-      </button>
+      <Button
+        disabled={inputSearchText ? false : true}
+        type="submit"
+        className="px-5"
+        variant={"outline"}
+        size={"sm"}
+      >
+        <Search className="w-3 h-3 mr-2" />
+        <span>Search</span>
+      </Button>
     </form>
   );
 };

@@ -2,7 +2,6 @@
 import {
   Bookmark,
   Home,
-  Menu,
   MessageCircle,
   Pen,
   Search,
@@ -12,7 +11,6 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Card } from "./ui/card";
 import {
   Dialog,
   DialogClose,
@@ -22,98 +20,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Button } from "./ui/button";
-import axiosInstance from "@/lib/axios";
-import { useToast } from "./ui/use-toast";
-import { ToastAction } from "./ui/toast";
 import Link from "next/link";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { useAuth } from "@/app/context/AuthContext";
 import { getMediaUrl } from "@/lib/utils";
-import { useTheme } from "next-themes";
+import axiosInstance from "@/lib/axios";
+import { ToastAction } from "@radix-ui/react-toast";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
+import { Textarea } from "../ui/textarea";
+import { useToast } from "../ui/use-toast";
+import { Input } from "../ui/input";
+import CreatePost from "./CreatePost";
+import SidebarMoreItems from "./SidebarMoreItems";
 
 const Sidebar = () => {
-  const { theme, setTheme } = useTheme();
   const { user, logout } = useAuth();
   const pathname = usePathname();
-  const [postContent, setPostContent] = useState("");
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isLoading, setLoading] = useState(false);
-  const { toast } = useToast();
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => setImagePreview(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
-  const createPost = async () => {
-    // Ensure the user has entered content or selected a file
-    if (!postContent && !selectedFile) {
-      toast({
-        title: "Error",
-        description: "Please provide content or select a file.",
-      });
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const formData = new FormData();
-      if (selectedFile) {
-        formData.append("media", selectedFile);
-      }
-      if (postContent) {
-        formData.append("content", postContent);
-      }
-
-      const response = await axiosInstance.post("/posts", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response.data) {
-        toast({
-          title: "Post Uploaded",
-          description: "Check your profile.",
-          action: (
-            <ToastAction altText="View Post">
-              <Link href={`/posts/${response.data._id}`}>View Post</Link>
-            </ToastAction>
-          ),
-        });
-        setPostContent(""); // Clear the post content
-        setSelectedFile(null); // Clear the selected file
-      }
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to upload the post.";
-      toast({
-        title: "Upload Failed",
-        description: errorMessage,
-      });
-      console.error("Post upload error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <Card className="rounded-none fixed flex-col px-5 py-7 justify-between hidden h-screen md:flex min-w-[15rem] max-w-[15rem]">
@@ -126,12 +49,7 @@ const Sidebar = () => {
             label="Home"
             icon={<Home />}
           />
-          <SideBarItem
-            path="/"
-            pathname={pathname}
-            label="Search"
-            icon={<Search />}
-          />
+          <SideBarItem pathname={pathname} label="Search" icon={<Search />} />
 
           <Dialog>
             <DialogTrigger>
@@ -142,37 +60,8 @@ const Sidebar = () => {
                 </span>
               </div>
             </DialogTrigger>
-            <DialogContent className="outline bg-red-500">
-              <DialogHeader>
-                <DialogTitle className="mb-3 text-2xl">Create Post</DialogTitle>
-                <DialogDescription className="flex flex-col gap-3 my-4">
-                  <Input
-                    onChange={handleFileChange}
-                    type="file"
-                    accept=".jpeg,.jpg,.png,.gif,.mp4,.mov,.avi,.mkv,.webm"
-                  />
-                  {imagePreview && (
-                    <div className="mt-4 flex justify-center">
-                      <img
-                        src={imagePreview}
-                        alt="Image Preview"
-                        className="max-w-sm rounded object-cover shadow-lg"
-                      />
-                    </div>
-                  )}
-                  <Textarea
-                    className="text-primary h-32"
-                    value={postContent}
-                    onChange={(e) => setPostContent(e.target.value)}
-                    placeholder="Share your thougts..."
-                  />
-                  <DialogClose asChild>
-                    <Button onClick={createPost} disabled={isLoading}>
-                      {isLoading ? "Uploading..." : "Upload"}
-                    </Button>
-                  </DialogClose>
-                </DialogDescription>
-              </DialogHeader>
+            <DialogContent>
+              <CreatePost />
             </DialogContent>
           </Dialog>
 
@@ -210,34 +99,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <div>
-            <div className="flex gap-4 items-center rounded hover:cursor-pointer">
-              <Menu />
-              <span>More</span>
-            </div>
-          </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-[10rem]">
-          <DropdownMenuLabel>More</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            {theme === "light" && (
-              <span onClick={() => setTheme("dark")}>Dark mode</span>
-            )}
-            {theme === "dark" && (
-              <span onClick={async () => setTheme("light")}>Light mode</span>
-            )}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => logout()}
-            className="mt-3 bg-destructive text-destructive-foreground"
-          >
-            Logout
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <SidebarMoreItems />
     </Card>
   );
 };
@@ -246,23 +108,35 @@ type SideBarItemProps = {
   pathname: string;
   label: string;
   icon: any;
-  path: string;
+  path?: string;
 };
 const SideBarItem = (props: SideBarItemProps) => {
   const isActivePage = props.pathname === props.path;
   return (
     <div>
-      <Link
-        href={props.path}
-        className={`flex gap-4 items-center rounded hover:cursor-pointer`}
-      >
-        {props.icon}
-        <span className={isActivePage ? "font-bold" : ""}>{props.label}</span>
-      </Link>
+      {props.path ? (
+        <Link
+          href={props.path}
+          className={`flex gap-4 items-center rounded hover:cursor-pointer`}
+        >
+          {props.icon}
+          <span className={isActivePage ? "font-bold" : ""}>{props.label}</span>
+        </Link>
+      ) : (
+        <div className={`flex gap-4 items-center rounded hover:cursor-pointer`}>
+          {props.icon}
+          <span className={isActivePage ? "font-bold" : ""}>{props.label}</span>
+        </div>
+      )}
     </div>
   );
 };
-const SideBarItem2 = (props: SideBarItemProps) => {
+const SideBarItem2 = (props: {
+  pathname: string;
+  label: string;
+  icon: any;
+  path: string;
+}) => {
   return (
     <div className="hover:bg-secondary p-3 rounded-lg hover:scale-105 transition-all duration-150">
       <Link href={props.path} className={`flex rounded hover:cursor-pointer`}>

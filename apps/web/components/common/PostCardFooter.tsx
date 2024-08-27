@@ -32,7 +32,7 @@ type PostCardFooterProps = {
   setPostModelOpen: Dispatch<SetStateAction<boolean>>;
   isPostModelOpen: boolean;
   followUser: () => Promise<void>;
-  postComment: () => Promise<void>;
+  postComment: (e: { preventDefault: () => void }) => Promise<void>;
 };
 
 const PostCardFooter = (props: PostCardFooterProps) => (
@@ -212,7 +212,7 @@ const CommentInput = ({
 }: {
   inputCommentText: string;
   setInputCommentText: Dispatch<SetStateAction<string>>;
-  postComment: () => Promise<void>;
+  postComment: (e: { preventDefault: () => void }) => Promise<void>;
   showEmojiPicker: boolean;
   setShowEmojiPicker: Dispatch<SetStateAction<boolean>>;
   addEmoji: (emoji: any) => void;

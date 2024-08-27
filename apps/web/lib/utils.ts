@@ -76,3 +76,26 @@ export const LocalStorageHandler = {
 };
 export const fetcher = (url: string) =>
   axiosInstance.get(url).then((res) => res.data);
+
+export const postReply = async (commentId: string, replyText: string) => {
+  try {
+    const res = axiosInstance.post(`/posts/comments/${commentId}/replies`, {
+      content: replyText.trim(),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const likeContent = async (
+  contentType: "Reply" | "Post" | "Comment",
+  postId: string
+) => {
+  try {
+    const res = await axiosInstance.post(
+      `/posts/${postId}/${contentType}/like`
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};

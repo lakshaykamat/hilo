@@ -12,6 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Link from "next/link";
+import Image from "next/image";
 
 type UserWithPosts = User & {
   posts: Post[];
@@ -30,8 +31,11 @@ const ProfileComponent = ({
       {/* Profile Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center w-full text-secondary-foreground gap-6 md:gap-10 p-6 bg-secondary shadow-lg rounded-lg">
         <div className="flex flex-col md:flex-row items-center gap-6">
-          <img
-            className="w-32 h-32 rounded-full object-cover border-2 border-primary"
+          <Image
+            width={128}
+            height={128}
+            objectFit="cover"
+            className="rounded-full object-cover border-2 border-primary"
             src={
               user.profilePicture.startsWith("uploads\\")
                 ? "http://127.0.0.1:5000/" + user.profilePicture

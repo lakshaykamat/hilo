@@ -1,4 +1,5 @@
 import { Metadata } from "@/types/Post";
+import Image from "next/image";
 
 type PostContentProps = {
   fileType?: string;

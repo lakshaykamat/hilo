@@ -17,7 +17,7 @@ const MessageItem: React.FC<MessageItemProps> = ({
   chatType,
   time,
 }) => {
-  const isOwnMessage = senderID === ""; //userID
+  const isOwnMessage = senderID === userID; //userID
 
   return (
     <div
