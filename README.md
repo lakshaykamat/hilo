@@ -1,6 +1,6 @@
 # Hilo - Social Media Platform
 
-![Hilo Logo](client/public/hilo-logo.png)
+![Hilo Logo](public/hilo-logo.png)
 
 **Hilo** is a robust social media platform designed for scalability, performance, and rich user interaction. This document provides an overview of the platform's features, technical architecture, systems design, and database strategies that power Hilo.
 
@@ -11,34 +11,30 @@
 - **Share Your Thoughts**: Post updates, ideas, or thoughts with your followers. Hilo supports rich text formatting, allowing you to express yourself freely.
 - **Interactive Comments**: Engage with other users through comments and replies, fostering meaningful discussions.
 
-![Textual Posts Screenshot](path/to/textual_posts_screenshot.png)
+![1724779751261](public/text-post.png)
 
 ### 📸 **Media Sharing**
 
 - **Image and Video Uploads**: Easily upload and share photos and videos directly from your device.
 - **Image Preview and Editing Tools**: Before uploading, preview your images and apply basic edits to ensure they look perfect.
 
-![Media Sharing Screenshot](path/to/media_sharing_screenshot.png)
+![1724779789371](public/home.png)
 
 ### 💬 **Real-time Chat**
 
 - **Instant Messaging**: Connect with your friends through private or group chats. Enjoy real-time messaging with read receipts and typing indicators.
 - **Group Chats**: Create group conversations with up to 10 participants, keeping everyone in the loop.
 
-![Chat Screenshot](path/to/chat_screenshot.png)
+![1724779828768](public/chats.png)
 
 ### 🧠 **Recommendation Engine**
 
 - **Personalized Feed**: Discover content tailored to your interests with our intelligent recommendation system. Your feed evolves based on what you engage with the most.
 
-![Recommendation Engine Screenshot](sandbox:/mnt/data/A_screenshot_of_a_social_media_platform_interface_.png)
-
 ### 📊 **Scalable and Performant**
 
 - **Optimized for Speed**: Hilo is built with performance in mind, ensuring low latency and fast load times even with high traffic.
 - **Scalable Architecture**: Leveraging Node.js and MongoDB, Hilo is designed to grow with your community, handling increasing user loads effortlessly.
-
-![Scalability Screenshot](path/to/scalability_screenshot.png)
 
 ## Technical Overview
 
@@ -90,7 +86,3 @@ The recommendation engine is a core feature of Hilo, leveraging collaborative fi
 ## Conclusion
 
 Hilo is engineered for performance, scalability, and user engagement. By adopting modern technologies and architectural patterns, Hilo offers a seamless social media experience while being robust enough to handle the demands of a growing user base.
-
----
-
-This README provides a comprehensive overview of both the user-facing features and the technical backbone of the Hilo platform. Adjust the paths to screenshots and any specific technical details based on your actual implementation.
